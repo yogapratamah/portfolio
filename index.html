@@ -6,21 +6,30 @@
 <title>Yoga Pratama H. — Product Design Lead</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0f0f0f;
-    --card-bg:#161616;
-    --ink:#ededed;
-    --ink-dim:#888888;
-    --line:#262626;
+    --bg:#0b0b0a;
+    --bg-alt:#141311;
+    --bg-raise:#1b1a17;
+    --ink:#f3f0e9;
+    --ink-dim:#8f8b80;
+    --ink-faint:#514e47;
+    --line:#2b2925;
+    --line-strong:#3d3a34;
     --accent:#ff3b1f;
-    --sans: 'Inter', sans-serif;
-    --display: 'Space Grotesk', sans-serif;
-    --rail-w: 260px;
+    --accent-ink:#0b0b0a;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Archivo', sans-serif;
+    --display: 'Archivo Black', sans-serif;
+    --rail-w: 84px;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
   body{
     background:var(--bg);
     color:var(--ink);
@@ -30,378 +39,916 @@
   }
   a{color:inherit;text-decoration:none;}
   button{font-family:inherit;background:none;border:none;color:inherit;cursor:pointer;}
+  ::selection{background:var(--accent);color:var(--accent-ink);}
 
-  .layout-container { display: flex; min-height: 100vh; }
-
-  /* Sidebar */
-  .sidebar {
-    width: var(--rail-w);
-    border-right: 1px solid var(--line);
-    padding: 48px 36px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    position: fixed;
-    top: 0; left: 0; height: 100vh;
-    background: var(--bg);
-    z-index: 50;
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--ink-dim);
+    display:flex;
+    align-items:center;
+    gap:8px;
   }
-  .brand {
-    font-family: var(--display);
-    font-weight: 700;
-    font-size: 20px;
-    letter-spacing: -0.02em;
-  }
-  .nav-links { display: flex; flex-direction: column; gap: 16px; }
-  .nav-links button {
-    text-align: left;
-    font-size: 14px;
-    color: var(--ink-dim);
-    transition: color 0.2s;
-  }
-  .nav-links button:hover, .nav-links button.active { color: var(--ink); }
-  .sidebar-foot { font-size: 12px; color: var(--ink-dim); line-height: 1.5; }
-
-  /* Main Content */
-  .main-content {
-    margin-left: var(--rail-w);
-    flex: 1;
-    padding: 80px 80px;
-    max-width: 1200px;
+  .eyebrow::before{
+    content:"";
+    width:6px;height:6px;
+    background:var(--accent);
+    display:inline-block;
   }
 
-  .page { display: none; }
-  .page.active { display: block; }
+  /* ===== registration marks — signature element ===== */
+  .reg{
+    position:fixed;
+    width:16px;height:16px;
+    pointer-events:none;
+    z-index:80;
+    opacity:0.55;
+  }
+  .reg::before,.reg::after{content:"";position:absolute;background:var(--ink-dim);}
+  .reg::before{top:50%;left:0;width:100%;height:1px;transform:translateY(-50%);}
+  .reg::after{left:50%;top:0;height:100%;width:1px;transform:translateX(-50%);}
+  .reg-tl{top:14px;left:14px;}
+  .reg-tr{top:14px;right:14px;}
+  .reg-bl{bottom:14px;left:14px;}
+  .reg-br{bottom:14px;right:14px;}
+  @media (max-width:760px){ .reg{display:none;} }
 
-  .hero { padding-bottom: 80px; border-bottom: 1px solid var(--line); }
-  .hero h1 {
-    font-family: var(--display);
-    font-size: clamp(36px, 4.5vw, 60px);
-    line-height: 1.1;
-    font-weight: 600;
-    letter-spacing: -0.03em;
-    margin-bottom: 24px;
-    max-width: 800px;
+  .hud{
+    position:fixed;
+    left:14px;bottom:40px;
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:0.1em;
+    color:var(--ink-faint);
+    z-index:80;
+    writing-mode:vertical-rl;
+    text-transform:uppercase;
   }
-  .hero p {
-    font-size: 17px;
-    color: var(--ink-dim);
-    line-height: 1.6;
-    max-width: 650px;
-    margin-bottom: 36px;
-  }
-  .hero p strong { color: var(--ink); }
+  @media (max-width:760px){ .hud{display:none;} }
 
-  .section-title {
-    font-family: var(--display);
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--ink-dim);
-    margin: 60px 0 24px;
+  /* ===== rail nav ===== */
+  .rail{
+    position:fixed;
+    top:0;left:0;bottom:0;
+    width:var(--rail-w);
+    border-right:1px solid var(--line);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:space-between;
+    padding:22px 0 26px;
+    z-index:90;
+    background:var(--bg);
+  }
+  .rail .mark{
+    font-family:var(--display);
+    font-size:15px;
+    line-height:1;
+    writing-mode:vertical-rl;
+    letter-spacing:0.02em;
+  }
+  .rail nav{display:flex;flex-direction:column;gap:26px;align-items:center;}
+  .rail nav button{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.14em;
+    writing-mode:vertical-rl;
+    color:var(--ink-dim);
+    padding:6px 0;
+    position:relative;
+  }
+  .rail nav button.active{color:var(--ink);}
+  .rail nav button.active::before{
+    content:"";
+    position:absolute;
+    left:-13px;top:50%;
+    width:6px;height:6px;
+    background:var(--accent);
+    transform:translateY(-50%);
+  }
+  .rail .foot{
+    font-family:var(--mono);
+    font-size:9px;
+    color:var(--ink-faint);
+    writing-mode:vertical-rl;
+    letter-spacing:0.08em;
   }
 
-  /* Works List */
-  .works-list { display: flex; flex-direction: column; gap: 20px; }
-  .work-item {
-    background: var(--card-bg);
-    border: 1px solid var(--line);
-    padding: 36px;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 30px;
-    align-items: center;
-    transition: border-color 0.2s;
-    cursor: pointer;
+  .rail-toggle{display:none;}
+  @media (max-width:760px){
+    :root{--rail-w:0px;}
+    .rail{
+      width:100%;height:56px;
+      flex-direction:row;
+      top:0;left:0;right:0;bottom:auto;
+      border-right:none;border-bottom:1px solid var(--line);
+      padding:0 16px;
+    }
+    .rail .mark{writing-mode:horizontal-tb;font-size:14px;}
+    .rail nav{
+      position:fixed;top:56px;left:0;right:0;
+      flex-direction:column;
+      background:var(--bg);
+      border-bottom:1px solid var(--line);
+      padding:18px 0;
+      display:none;
+      align-items:flex-start;
+    }
+    .rail nav.open{display:flex;}
+    .rail nav button{writing-mode:horizontal-tb;font-size:13px;padding:12px 24px;width:100%;text-align:left;}
+    .rail .foot{display:none;}
+    .rail-toggle{
+      display:flex;flex-direction:column;gap:4px;
+      width:20px;
+    }
+    .rail-toggle span{height:1px;background:var(--ink);width:100%;}
   }
-  .work-item:hover { border-color: var(--ink-dim); }
-  .work-meta {
-    font-size: 11px;
-    color: var(--accent);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 8px;
-  }
-  .work-info h3 {
-    font-family: var(--display);
-    font-size: 22px;
-    font-weight: 600;
-    margin-bottom: 10px;
-    letter-spacing: -0.01em;
-  }
-  .work-info p {
-    font-size: 14px;
-    color: var(--ink-dim);
-    line-height: 1.5;
-    max-width: 650px;
-  }
-  .work-action { font-size: 14px; color: var(--ink); display: flex; align-items: center; gap: 8px; }
 
-  /* Detailed Timeline & About Blocks */
-  .timeline-block { border-top: 1px solid var(--line); margin-top: 40px; }
-  .t-row {
-    display: grid;
-    grid-template-columns: 160px 1fr;
-    gap: 24px;
-    padding: 32px 0;
-    border-bottom: 1px solid var(--line);
-  }
-  .t-row .yr { font-size: 13px; color: var(--ink-dim); font-family: var(--display); }
-  .t-row h4 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
-  .t-row .role { font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; display: block; }
-  .t-row ul { list-style: none; }
-  .t-row li { font-size: 14px; color: var(--ink-dim); line-height: 1.6; position: relative; padding-left: 16px; margin-bottom: 4px; }
-  .t-row li::before { content: "—"; position: absolute; left: 0; color: var(--line); }
+  .app{ margin-left:var(--rail-w); }
+  @media (max-width:760px){ .app{margin-left:0; margin-top:56px;} }
 
-  .toolkit-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-    margin-top: 40px;
-  }
-  .toolkit-card {
-    background: var(--card-bg);
-    border: 1px solid var(--line);
-    padding: 28px;
-  }
-  .toolkit-card h4 {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--accent);
-    margin-bottom: 14px;
-    font-family: var(--display);
-  }
-  .toolkit-card ul { list-style: none; }
-  .toolkit-card li { font-size: 14px; color: var(--ink-dim); padding: 6px 0; border-bottom: 1px solid var(--line); }
-  .toolkit-card li:last-child { border-bottom: none; }
+  .page{ display:none; }
+  .page.active{ display:block; }
 
-  @media(max-width: 900px) {
-    .layout-container { flex-direction: column; }
-    .sidebar { position: relative; width: 100%; height: auto; padding: 24px; flex-direction: row; align-items: center; }
-    .nav-links { display: flex; flex-direction: row; gap: 12px; font-size: 12px; }
-    .sidebar-foot { display: none; }
-    .main-content { margin-left: 0; padding: 40px 20px; }
-    .work-item { grid-template-columns: 1fr; padding: 24px; }
-    .toolkit-grid { grid-template-columns: 1fr; }
-    .t-row { grid-template-columns: 1fr; gap: 8px; }
+  .wrap{
+    max-width:1180px;
+    padding:0 56px;
   }
+  @media (max-width:760px){ .wrap{padding:0 20px;} }
+
+  section{
+    border-bottom:1px solid var(--line);
+    padding:96px 0;
+  }
+  @media (max-width:760px){ section{padding:56px 0;} }
+
+  /* ===== hero ===== */
+  .hero{padding-top:120px;}
+  .hero .wrap{max-width:1180px;}
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:28px;
+  }
+  h1.display{
+    font-family:var(--display);
+    font-size:clamp(44px,8vw,108px);
+    line-height:0.94;
+    letter-spacing:-0.01em;
+    text-transform:uppercase;
+  }
+  h1.display .line{display:block;}
+  h1.display .out{ -webkit-text-stroke:1.5px var(--ink); color:transparent; }
+  .lede{
+    font-family:var(--sans);
+    font-weight:400;
+    font-size:clamp(16px,1.7vw,20px);
+    color:var(--ink-dim);
+    max-width:640px;
+    line-height:1.55;
+    margin-top:18px;
+  }
+  .lede strong{color:var(--ink);font-weight:600;}
+  .cta-row{
+    display:flex;gap:14px;
+    margin-top:40px;
+    flex-wrap:wrap;
+  }
+  .btn{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    padding:15px 26px;
+    border:1px solid var(--line-strong);
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    transition:background .18s ease, color .18s ease, border-color .18s ease;
+  }
+  .btn:hover, .btn:focus-visible{background:var(--ink);color:var(--bg);border-color:var(--ink);}
+  .btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);}
+  .btn.primary:hover{background:var(--ink);border-color:var(--ink);}
+  .btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+  .meta-strip{
+    margin-top:70px;
+    display:flex;
+    gap:0;
+    border-top:1px solid var(--line);
+  }
+  .meta-strip .cell{
+    flex:1;
+    padding:20px 22px 0;
+    border-right:1px solid var(--line);
+  }
+  .meta-strip .cell:last-child{border-right:none;}
+  .meta-strip .cell .num{font-family:var(--mono);font-size:26px;color:var(--ink);}
+  .meta-strip .cell .lbl{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-faint);margin-top:6px;}
+  @media (max-width:760px){
+    .meta-strip{flex-wrap:wrap;}
+    .meta-strip .cell{flex:1 1 50%;border-bottom:1px solid var(--line);padding-bottom:18px;}
+  }
+
+  /* ===== section headers ===== */
+  .sec-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:24px;
+    margin-bottom:48px;
+    flex-wrap:wrap;
+  }
+  h2.sec-title{
+    font-family:var(--display);
+    font-size:clamp(28px,3.6vw,46px);
+    text-transform:uppercase;
+    line-height:1.02;
+    max-width:640px;
+  }
+  .sec-sub{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--ink-dim);
+    max-width:320px;
+    line-height:1.6;
+    text-align:right;
+  }
+  @media (max-width:760px){ .sec-sub{text-align:left;} }
+
+  /* ===== work grid ===== */
+  .work-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  @media (max-width:760px){ .work-grid{grid-template-columns:1fr;} }
+  .work-card{
+    background:var(--bg);
+    padding:34px;
+    min-height:300px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    cursor:pointer;
+    transition:background .18s ease;
+  }
+  .work-card:hover, .work-card:focus-visible{background:var(--bg-alt);}
+  .work-card .idx{font-family:var(--mono);font-size:11px;color:var(--ink-faint);}
+  .work-card h3{
+    font-family:var(--sans);
+    font-weight:700;
+    font-size:22px;
+    margin-top:14px;
+    line-height:1.2;
+  }
+  .work-card p{
+    font-family:var(--sans);
+    font-size:14px;
+    color:var(--ink-dim);
+    margin-top:10px;
+    line-height:1.5;
+  }
+  .work-card .visual{
+    height:110px;
+    border:1px solid var(--line-strong);
+    margin-top:22px;
+    display:flex;align-items:flex-end;
+    padding:10px;
+    gap:4px;
+    overflow:hidden;
+  }
+  .work-card .visual .bar{background:var(--accent);flex:1;opacity:.85;}
+  .work-card .metric{
+    margin-top:20px;
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--ink);
+    display:flex;align-items:center;gap:8px;
+  }
+  .work-card .metric::before{content:"→";color:var(--accent);}
+
+  /* ===== toolkit ===== */
+  .toolkit{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:40px;
+  }
+  @media (max-width:760px){ .toolkit{grid-template-columns:1fr;gap:36px;} }
+  .toolkit h4{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:18px;
+  }
+  .toolkit ul{list-style:none;}
+  .toolkit li{
+    font-family:var(--sans);
+    font-size:16px;
+    padding:12px 0;
+    border-bottom:1px solid var(--line);
+  }
+
+  footer.sitefoot{
+    padding:70px 0 40px;
+  }
+  .foot-cta{
+    font-family:var(--display);
+    font-size:clamp(30px,5vw,64px);
+    text-transform:uppercase;
+    line-height:1;
+  }
+  .foot-links{
+    display:flex;gap:26px;
+    margin-top:40px;
+    flex-wrap:wrap;
+  }
+  .foot-links a{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    padding-bottom:4px;
+    border-bottom:1px solid var(--line-strong);
+  }
+  .foot-links a:hover{border-color:var(--accent);color:var(--accent);}
+  .foot-bottom{
+    margin-top:60px;
+    display:flex;justify-content:space-between;
+    font-family:var(--mono);font-size:10px;color:var(--ink-faint);
+    letter-spacing:0.08em;text-transform:uppercase;
+    flex-wrap:wrap;gap:10px;
+  }
+
+  /* ===== about page ===== */
+  .about-split{
+    display:grid;
+    grid-template-columns:0.8fr 1.2fr;
+    gap:64px;
+  }
+  @media (max-width:900px){ .about-split{grid-template-columns:1fr;} }
+  .photo-block{
+    border:1px solid var(--line-strong);
+    aspect-ratio:4/5;
+    background:
+      repeating-linear-gradient(135deg, var(--bg-raise) 0 2px, var(--bg-alt) 2px 26px);
+    display:flex;
+    align-items:flex-end;
+    padding:18px;
+  }
+  .photo-block .cap{font-family:var(--mono);font-size:10px;color:var(--ink-dim);letter-spacing:0.08em;text-transform:uppercase;}
+  .about-copy h3.small-eyebrow{
+    font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:14px;
+  }
+  .about-copy h2{
+    font-family:var(--display);
+    font-size:clamp(26px,3.4vw,42px);
+    text-transform:uppercase;
+    line-height:1.08;
+    margin-bottom:24px;
+  }
+  .about-copy p{
+    font-family:var(--sans);
+    font-size:16px;
+    line-height:1.7;
+    color:var(--ink-dim);
+    max-width:560px;
+    margin-bottom:16px;
+  }
+  .about-copy p strong{color:var(--ink);}
+
+  .timeline{border-top:1px solid var(--line);}
+  .t-row{
+    display:grid;
+    grid-template-columns:170px 1fr;
+    gap:24px;
+    padding:28px 0;
+    border-bottom:1px solid var(--line);
+  }
+  @media (max-width:640px){ .t-row{grid-template-columns:1fr;gap:6px;} }
+  .t-row .yr{font-family:var(--mono);font-size:13px;color:var(--ink-dim);}
+  .t-row h4{font-family:var(--sans);font-weight:700;font-size:19px;margin-bottom:6px;}
+  .t-row .role{font-family:var(--mono);font-size:11px;color:var(--accent);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;display:block;}
+  .t-row ul{list-style:none;}
+  .t-row li{font-family:var(--sans);font-size:14px;color:var(--ink-dim);line-height:1.6;position:relative;padding-left:16px;}
+  .t-row li::before{content:"—";position:absolute;left:0;color:var(--ink-faint);}
+
+  .speak-card{
+    border:1px solid var(--line-strong);
+    padding:34px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:30px;
+  }
+  @media (max-width:640px){ .speak-card{grid-template-columns:1fr;} }
+  .speak-card h4{font-family:var(--sans);font-weight:700;font-size:18px;margin-bottom:4px;}
+  .speak-card .role{font-family:var(--mono);font-size:11px;color:var(--ink-dim);text-transform:uppercase;}
+  .speak-card ul{list-style:none;margin-top:12px;}
+  .speak-card li{font-family:var(--sans);font-size:14px;color:var(--ink-dim);padding:6px 0;border-top:1px solid var(--line);}
+
+  /* ===== bdsgn page ===== */
+  .bdsgn-hero p.lede{margin-top:20px;}
+  .gallery{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  @media (max-width:760px){ .gallery{grid-template-columns:1fr 1fr;} }
+  @media (max-width:520px){ .gallery{grid-template-columns:1fr;} }
+  .g-card{
+    background:var(--bg);
+    padding:22px;
+  }
+  .g-card .swatch{
+    aspect-ratio:4/3;
+    border:1px solid var(--line-strong);
+    margin-bottom:16px;
+    background:linear-gradient(160deg,var(--bg-raise),var(--bg-alt));
+    position:relative;
+    overflow:hidden;
+  }
+  .g-card .swatch::after{
+    content:"";position:absolute;inset:0;
+    background:
+      linear-gradient(90deg, transparent 0 49%, var(--line-strong) 49% 51%, transparent 51% 100%),
+      linear-gradient(0deg, transparent 0 49%, var(--line-strong) 49% 51%, transparent 51% 100%);
+  }
+  .g-card .tag{font-family:var(--mono);font-size:10px;color:var(--accent);text-transform:uppercase;letter-spacing:0.08em;}
+  .g-card h4{font-family:var(--sans);font-weight:700;font-size:16px;margin-top:8px;}
+  .g-card .link{font-family:var(--mono);font-size:11px;color:var(--ink-dim);margin-top:10px;display:inline-block;}
+  .g-card .link:hover{color:var(--accent);}
+
+  .stat-strip{
+    display:grid;grid-template-columns:1fr 1fr;
+    border:1px solid var(--line);
+  }
+  @media (max-width:640px){ .stat-strip{grid-template-columns:1fr;} }
+  .stat-strip .s{padding:34px;border-right:1px solid var(--line);}
+  .stat-strip .s:last-child{border-right:none;}
+  @media (max-width:640px){ .stat-strip .s{border-right:none;border-bottom:1px solid var(--line);} }
+  .stat-strip p{font-family:var(--sans);font-size:15px;color:var(--ink-dim);line-height:1.6;}
+  .stat-strip .eyebrow{margin-bottom:12px;}
+
+  /* ===== work index page ===== */
+  .case-list{border-top:1px solid var(--line);}
+  .case{
+    border-bottom:1px solid var(--line);
+    padding:44px 0;
+  }
+  .case-top{
+    display:grid;
+    grid-template-columns:60px 1fr auto;
+    gap:24px;
+    align-items:start;
+    cursor:pointer;
+  }
+  @media (max-width:640px){ .case-top{grid-template-columns:1fr;} }
+  .case-top .num{font-family:var(--mono);font-size:13px;color:var(--ink-faint);padding-top:6px;}
+  .case-top h3{font-family:var(--display);font-size:clamp(22px,3vw,34px);text-transform:uppercase;line-height:1.1;}
+  .case-top .cat{font-family:var(--mono);font-size:11px;color:var(--accent);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;display:block;}
+  .case-top .expand{font-family:var(--mono);font-size:20px;color:var(--ink-dim);padding-top:2px;}
+  .case-body{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .32s ease;
+    padding-left:84px;
+  }
+  @media (max-width:640px){ .case-body{padding-left:0;} }
+  .case.open .case-body{max-height:900px;}
+  .case-body-inner{
+    display:grid;
+    grid-template-columns:1.3fr 0.9fr;
+    gap:40px;
+    padding-top:24px;
+  }
+  @media (max-width:800px){ .case-body-inner{grid-template-columns:1fr;} }
+  .case-body p{font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--ink-dim);margin-bottom:14px;}
+  .case-body p strong{color:var(--ink);}
+  .case-visual{
+    border:1px solid var(--line-strong);
+    padding:20px;
+    min-height:180px;
+  }
+  .case-visual .lbl{font-family:var(--mono);font-size:10px;color:var(--ink-faint);text-transform:uppercase;margin-bottom:14px;display:block;}
+  .bars{display:flex;align-items:flex-end;gap:6px;height:100px;}
+  .bars .b{flex:1;background:var(--ink-faint);}
+  .bars .b.hi{background:var(--accent);}
+  .metric-box{
+    border-top:1px solid var(--line);
+    margin-top:16px;padding-top:16px;
+    font-family:var(--mono);
+    font-size:22px;
+  }
+  .metric-box .lbl2{display:block;font-size:10px;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.08em;margin-top:6px;}
+
+  .archive-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:1px;
+    background:var(--line);border:1px solid var(--line);
+    margin-top:60px;
+  }
+  @media (max-width:640px){ .archive-grid{grid-template-columns:1fr;} }
+  .archive-card{background:var(--bg);padding:30px;}
+  .archive-card h4{font-family:var(--sans);font-weight:700;font-size:18px;margin:10px 0;}
+  .archive-card p{font-family:var(--sans);font-size:14px;color:var(--ink-dim);line-height:1.6;margin-bottom:14px;}
+
+  .fade-in{opacity:0;transform:translateY(14px);transition:opacity .5s ease, transform .5s ease;}
+  .fade-in.in{opacity:1;transform:none;}
 </style>
 </head>
 <body>
 
-  <div class="layout-container">
-    <aside class="sidebar">
-      <div>
-        <div class="brand">Yoga Pratama H.</div>
-      </div>
-      <nav class="nav-links">
-        <button class="active" onclick="switchPage('home')">Index</button>
-        <button onclick="switchPage('work')">Works</button>
-        <button onclick="switchPage('about')">About</button>
-        <button onclick="switchPage('bdsgn')">BDSGN</button>
-      </nav>
-      <div class="sidebar-foot">
-        Product Design Lead<br>Bandung, ID — 2026
-      </div>
-    </aside>
+  <div class="reg reg-tl"></div>
+  <div class="reg reg-tr"></div>
+  <div class="reg reg-bl"></div>
+  <div class="reg reg-br"></div>
+  <div class="hud" id="hud">VIEW — HOME / 01</div>
 
-    <main class="main-content">
-      
-      <!-- HOME PAGE -->
-      <div id="page-home" class="page active">
-        <section class="hero">
-          <div style="font-size: 12px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px;">Product Design Lead — Bandung, Indonesia</div>
-          <h1>Design Ops for Dense SaaS Systems & Multi-Platform Frameworks.</h1>
-          <p>I'm <strong>Yoga Pratama H.</strong>, specializing in SaaS product strategy, design systems engineering, and scalable architecture. Currently leading design at <strong>Ignatia</strong>, and founder of <strong>BDSGN</strong>.</p>
-        </section>
+  <div class="rail">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <button class="rail-toggle" id="railToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+      <div class="mark">YPH</div>
+    </div>
+    <nav id="railNav">
+      <button data-page="home" class="active">Home</button>
+      <button data-page="work">Work</button>
+      <button data-page="about">About</button>
+      <button data-page="bdsgn">BDSGN</button>
+    </nav>
+    <div class="foot">BANDUNG, ID<br>© 2026</div>
+  </div>
 
-        <div class="section-title">Selected Works</div>
-        <div class="works-list">
-          <div class="work-item" onclick="switchPage('work')">
-            <div class="work-info">
-              <div class="work-meta">Case 01 — Design Operations & Automation</div>
-              <h3>Scaling B2B White-Label POS via Figma Variables</h3>
-              <p>Redesigned internal operations workflow by migrating to a multi-tier token architecture, cutting client onboarding bottlenecks.</p>
-            </div>
-            <div class="work-action">View →</div>
-          </div>
+  <div class="app">
 
-          <div class="work-item" onclick="switchPage('work')">
-            <div class="work-info">
-              <div class="work-meta">Case 02 — Multi-Platform SaaS</div>
-              <h3>Ignatia POS: Mobile Ecosystem Portrait & Landscape</h3>
-              <p>Building the foundational B2B POS multi-platform transactional engine and framework from scratch.</p>
-            </div>
-            <div class="work-action">View →</div>
-          </div>
-
-          <div class="work-item" onclick="switchPage('work')">
-            <div class="work-info">
-              <div class="work-meta">Case 03 — Data Architecture</div>
-              <h3>Overhauling Legacy Dashboard for Dense Data Presentation</h3>
-              <p>Structural overhaul and responsive web migration of the legacy merchant dashboard.</p>
-            </div>
-            <div class="work-action">View →</div>
-          </div>
+    <!-- ============ HOME ============ -->
+    <section id="page-home" class="page active">
+      <div class="hero wrap">
+        <div class="eyebrow">Product Design Lead — Bandung, Indonesia</div>
+        <h1 class="display" style="margin-top:22px;">
+          <span class="line">Design</span>
+          <span class="line">Ops for <span class="out">Dense</span></span>
+          <span class="line">SaaS Systems</span>
+        </h1>
+        <p class="lede">I'm <strong>Yoga Pratama H.</strong>, a Product Design Lead specializing in SaaS products, design systems engineering, and scalable product ecosystems. Currently leading design at <strong>Ignatia</strong>, and founder of <strong>BDSGN</strong>.</p>
+        <div class="cta-row">
+          <a href="#" class="btn primary" data-goto="work">View Selected Works ↓</a>
+          <a href="#" class="btn">Download CV ↗</a>
         </div>
-
-        <div class="section-title">Capabilities & Toolkit</div>
-        <div class="toolkit-grid">
-          <div class="toolkit-card">
-            <h4>Core Expertise</h4>
-            <ul>
-              <li>SaaS Product Strategy</li>
-              <li>Design Ops Architecture</li>
-              <li>Cross-Functional Leadership</li>
-            </ul>
-          </div>
-          <div class="toolkit-card">
-            <h4>Advanced Toolkit</h4>
-            <ul>
-              <li>Figma (Variables / Tokens)</li>
-              <li>Framer (Production-Ready)</li>
-              <li>Tokens Studio / JSON</li>
-            </ul>
-          </div>
-          <div class="toolkit-card">
-            <h4>Design Philosophy</h4>
-            <ul>
-              <li>Pragmatism &gt; Idealism</li>
-              <li>Data-Driven Decisions</li>
-              <li>Technical Feasibility First</li>
-            </ul>
-          </div>
+        <div class="meta-strip">
+          <div class="cell"><div class="num">6+</div><div class="lbl">Years in Product Design</div></div>
+          <div class="cell"><div class="num">96.7%</div><div class="lbl">Onboarding Time Cut, Case 01</div></div>
+          <div class="cell"><div class="num">02</div><div class="lbl">Platforms Founded &amp; Led</div></div>
+          <div class="cell"><div class="num">03</div><div class="lbl">POS Ecosystems Shipped</div></div>
         </div>
       </div>
 
-      <!-- WORK / CASE STUDIES PAGE -->
-      <div id="page-work" class="page">
-        <h1 style="font-family:var(--display); font-size: 38px; font-weight: 600; margin-bottom: 12px;">Selected Projects</h1>
-        <p style="color:var(--ink-dim); margin-bottom: 40px; font-size: 16px;">A complete working record of design ops, multi-platform architecture, and dense data systems.</p>
-        
-        <div class="works-list">
-          <div class="work-item" style="cursor: default;">
-            <div class="work-info">
-              <div class="work-meta">Case 01 — Design Ops</div>
-              <h3>Scaling B2B White-Label POS via Figma Variables Automation</h3>
-              <p style="margin-top: 12px;"><strong>Problem:</strong> Onboarding new white-label POS clients depended on manually rebuilt UI kits for every merchant theme — slow, error-prone, and hard to maintain at scale.</p>
-              <p style="margin-top: 8px;"><strong>Solution:</strong> Migrated the system to a multi-tier token architecture in Figma Variables: primitive tokens for raw values, semantic tokens for intent, and a component layer resolving automatically per client theme.</p>
-              <p style="margin-top: 8px;"><strong>Impact:</strong> Cut client onboarding friction dramatically and removed design bottlenecks from the sales pipeline entirely.</p>
+      <section>
+        <div class="wrap">
+          <div class="sec-head">
+            <h2 class="sec-title">Selected Works</h2>
+            <div class="sec-sub">A working record of design ops, multi-platform architecture, and dense-data systems — not a highlight reel.</div>
+          </div>
+          <div class="work-grid">
+            <div class="work-card fade-in" tabindex="0" data-goto="work" data-case="1">
+              <div><span class="idx">CASE 01 — DESIGN OPS</span>
+                <h3>Scaling B2B White-Label POS via Figma Variables Automation</h3>
+                <p>Redesigned the internal operations workflow by migrating to a multi-tier token architecture.</p>
+              </div>
+              <div class="visual"><div class="bar" style="height:30%"></div><div class="bar" style="height:55%"></div><div class="bar" style="height:40%"></div><div class="bar" style="height:80%"></div><div class="bar" style="height:97%"></div></div>
+              <div class="metric">96.7% production time saved</div>
+            </div>
+            <div class="work-card fade-in" tabindex="0" data-goto="work" data-case="2">
+              <div><span class="idx">CASE 02 — MULTI-PLATFORM SAAS</span>
+                <h3>Ignatia POS: Mobile Ecosystem Architecting Portrait &amp; Landscape</h3>
+                <p>Building the foundational B2B POS multi-platform ecosystem from scratch.</p>
+              </div>
+              <div class="visual"><div class="bar" style="height:60%"></div><div class="bar" style="height:60%"></div><div class="bar" style="height:90%;background:var(--ink-faint)"></div><div class="bar" style="height:60%"></div><div class="bar" style="height:60%"></div></div>
+              <div class="metric">Multi-platform adaptability</div>
+            </div>
+            <div class="work-card fade-in" tabindex="0" data-goto="work" data-case="3">
+              <div><span class="idx">CASE 03 — DATA ARCHITECTURE</span>
+                <h3>Overhauling Legacy Dashboard for Dense Data Presentation</h3>
+                <p>Structural overhaul and responsive migration of the legacy merchant dashboard.</p>
+              </div>
+              <div class="visual"><div class="bar" style="height:20%"></div><div class="bar" style="height:35%"></div><div class="bar" style="height:50%"></div><div class="bar" style="height:65%"></div><div class="bar" style="height:82%"></div></div>
+              <div class="metric">Optimized dense data presentation</div>
+            </div>
+            <div class="work-card fade-in" tabindex="0" data-goto="bdsgn">
+              <div><span class="idx">CASE 04 — SIDE HUSTLE &amp; INFRA</span>
+                <h3>BDSGN: Building a Design Platform &amp; Web Template Ecosystem</h3>
+                <p>Design curation and a web template business, run alongside the core role.</p>
+              </div>
+              <div class="visual"><div class="bar" style="height:44%"></div><div class="bar" style="height:70%"></div><div class="bar" style="height:44%"></div><div class="bar" style="height:70%"></div><div class="bar" style="height:44%"></div></div>
+              <div class="metric">Explore BDSGN</div>
             </div>
           </div>
+        </div>
+      </section>
 
-          <div class="work-item" style="cursor: default;">
-            <div class="work-info">
-              <div class="work-meta">Case 02 — Multi-Platform SaaS</div>
-              <h3>Ignatia POS: Mobile Ecosystem Architecting Portrait & Landscape</h3>
-              <p style="margin-top: 12px;"><strong>Execution:</strong> Built the foundational B2B POS multi-platform ecosystem from scratch. Designed highly adaptive native interfaces for both portrait and landscape layouts across tablets and mobile devices used in varied retail setups.</p>
-            </div>
+      <section>
+        <div class="wrap">
+          <div class="sec-head"><h2 class="sec-title">Capabilities &amp; Toolkit</h2></div>
+          <div class="toolkit">
+            <div><h4>Core Expertise</h4><ul>
+              <li>SaaS Product Strategy</li><li>Design Ops Architecture</li><li>Cross-Functional Team Leadership</li>
+            </ul></div>
+            <div><h4>Advanced Toolkit</h4><ul>
+              <li>Figma (Variables / Tokens)</li><li>Framer (Production-Ready)</li><li>Tokens Studio / JSON</li>
+            </ul></div>
+            <div><h4>Design Philosophy</h4><ul>
+              <li>Pragmatism &gt; Idealism</li><li>Data-Driven Decisions</li><li>Technical Feasibility First</li>
+            </ul></div>
           </div>
+        </div>
+      </section>
 
-          <div class="work-item" style="cursor: default;">
-            <div class="work-info">
-              <div class="work-meta">Case 03 — Data Architecture</div>
-              <h3>Overhauling Legacy Dashboard for Dense Data Presentation</h3>
-              <p style="margin-top: 12px;"><strong>Execution:</strong> Structural overhaul and responsive web migration of the legacy merchant dashboard, restructuring information hierarchy to keep dense operational data legible without hiding important metrics.</p>
-            </div>
+      <div class="wrap"><footer class="sitefoot">
+        <div class="foot-cta">Let's build<br>scalable systems<br>together.</div>
+        <div class="foot-links">
+          <a href="mailto:hello@yogapratama.id">Email ↗</a>
+          <a href="#" target="_blank">LinkedIn ↗</a>
+          <a href="#" data-goto="bdsgn">BDSGN Shop ↗</a>
+        </div>
+        <div class="foot-bottom"><span>Yoga Pratama H. — Product Design Lead</span><span>Bandung, ID / 2026</span></div>
+      </footer></div>
+    </section>
+
+    <!-- ============ ABOUT ============ -->
+    <section id="page-about" class="page">
+      <div class="wrap" style="padding-top:120px;">
+        <div class="eyebrow">About</div>
+        <div class="about-split" style="margin-top:26px;">
+          <div class="photo-block"><span class="cap">Portrait / Workspace — Bandung Studio</span></div>
+          <div class="about-copy">
+            <h3 class="small-eyebrow">About Me</h3>
+            <h2>Bridging Design Logic with Technical Feasibility.</h2>
+            <p>I am a Product Design Lead with <strong>6+ years</strong> of experience building multi-platform SaaS ecosystems, dense backoffice dashboards, and centralized design systems. I focus on Design Ops — creating scalable token architectures that cut production time.</p>
+            <p>Outside my core role, I curate digital products worldwide through <strong>BDSGN</strong> and write for <strong>UX Collective</strong>.</p>
           </div>
         </div>
       </div>
 
-      <!-- ABOUT PAGE -->
-      <div id="page-about" class="page">
-        <h1 style="font-family:var(--display); font-size: 38px; font-weight: 600; margin-bottom: 12px;">About Me</h1>
-        <p style="color:var(--ink-dim); line-height: 1.6; max-width: 650px; font-size: 16px;">
-          Product Design Lead with 6+ years of experience building multi-platform SaaS ecosystems, dense backoffice dashboards, and centralized design systems. Focused on Design Ops — creating scalable token architectures that cut production time.
-        </p>
-
-        <div class="section-title">Professional Experience</div>
-        <div class="timeline-block">
-          <div class="t-row">
-            <div class="yr">2022 — Present</div>
-            <div>
-              <h4>Product Design Lead</h4>
-              <span class="role">PT Pasti Laba Solusi Teknologi (Ignatia)</span>
-              <ul>
-                <li>Leading design initiatives for Ignatia's B2B ecosystem</li>
-                <li>Managing and mentoring junior designers</li>
-                <li>Architecting variables and semantic token systems</li>
-                <li>Migrating legacy web dashboards for dense data</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="t-row">
-            <div class="yr">2022 — Present</div>
-            <div>
-              <h4>Creative Director</h4>
-              <span class="role">Bonjourdsgn (BDSGN)</span>
+      <section>
+        <div class="wrap">
+          <div class="sec-head"><h2 class="sec-title">Professional Experience</h2></div>
+          <div class="timeline">
+            <div class="t-row"><div class="yr">2022 — Present</div><div>
+              <h4>Product Design Lead</h4><span class="role">PT Pasti Laba Solusi Teknologi (Ignatia)</span>
+              <ul><li>Leading design initiatives for Ignatia's B2B ecosystem</li><li>Managing and mentoring a junior designer</li><li>Architecting variables and semantic token systems</li><li>Migrating legacy web dashboards for dense data</li></ul>
+            </div></div>
+            <div class="t-row"><div class="yr">2022 — Present</div><div>
+              <h4>Creative Director</h4><span class="role">Bonjourdsgn (BDSGN)</span>
               <ul><li>Curating digital designs and selling web templates</li></ul>
-            </div>
-          </div>
-
-          <div class="t-row">
-            <div class="yr">2023 — Present</div>
-            <div>
-              <h4>UX Content Writer</h4>
-              <span class="role">UX Collective Bootcamp</span>
+            </div></div>
+            <div class="t-row"><div class="yr">2023 — Present</div><div>
+              <h4>UX Content Writer</h4><span class="role">UX Collective Bootcamp</span>
               <ul><li>Writing articles based on personal, hands-on product design</li></ul>
-            </div>
-          </div>
-
-          <div class="t-row">
-            <div class="yr">2020 — 2022</div>
-            <div>
-              <h4>UI/UX Designer</h4>
-              <span class="role">PT Pasti Laba Solusi Teknologi</span>
+            </div></div>
+            <div class="t-row"><div class="yr">2020 — 2022</div><div>
+              <h4>UI/UX Designer</h4><span class="role">PT Pasti Laba Solusi Teknologi</span>
               <ul><li>Architected the foundational B2B POS ecosystem from scratch</li></ul>
-            </div>
-          </div>
-
-          <div class="t-row">
-            <div class="yr">2021</div>
-            <div>
-              <h4>UI Designer</h4>
-              <span class="role">Billionaire Store</span>
+            </div></div>
+            <div class="t-row"><div class="yr">2021</div><div>
+              <h4>UI Designer</h4><span class="role">Billionaire Store</span>
               <ul><li>Transformed wireframes into high-fidelity mobile &amp; web UI</li></ul>
-            </div>
-          </div>
-
-          <div class="t-row">
-            <div class="yr">2019</div>
-            <div>
-              <h4>UI/UX Designer</h4>
-              <span class="role">BTS — PT Intersolusi Teknologi Asia</span>
+            </div></div>
+            <div class="t-row"><div class="yr">2019</div><div>
+              <h4>UI/UX Designer</h4><span class="role">BTS — PT Intersolusi Teknologi Asia</span>
               <ul><li>Handled interface designs for major clients, including PT KAI</li></ul>
+            </div></div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="wrap">
+          <div class="sec-head"><h2 class="sec-title">Speaking &amp; Community</h2></div>
+          <div class="speak-card">
+            <div><h4>Guest Speaker</h4><span class="role">MySkill — 2023</span></div>
+            <div><span class="role">Short-Class Sessions Covered</span>
+              <ul><li>UI/UX Design Fundamentals</li><li>UI/UX Wireframing &amp; Structural Design</li></ul>
             </div>
           </div>
         </div>
+      </section>
 
-        <div class="section-title">Speaking & Community</div>
-        <div class="toolkit-card" style="margin-top: 20px;">
-          <h4>Guest Speaker — MySkill (2023)</h4>
-          <p style="font-size: 14px; color: var(--ink-dim); margin-top: 6px;">Covering UI/UX Design Fundamentals and Wireframing & Structural Design sessions.</p>
+      <div class="wrap"><footer class="sitefoot">
+        <div class="foot-links">
+          <a href="mailto:hello@yogapratama.id">Email ↗</a>
+          <a href="#" target="_blank">LinkedIn ↗</a>
+          <a href="#" data-goto="bdsgn">BDSGN Shop ↗</a>
         </div>
+      </footer></div>
+    </section>
+
+    <!-- ============ BDSGN ============ -->
+    <section id="page-bdsgn" class="page">
+      <div class="wrap bdsgn-hero" style="padding-top:120px;">
+        <div class="eyebrow">BDSGN — Design Curation Platform</div>
+        <h1 class="display" style="margin-top:22px;font-size:clamp(36px,6.5vw,80px);">Curating Vision.<br>Crafting <span class="out">Templates</span>.</h1>
+        <p class="lede">Alongside my core role, I run BDSGN — a dedicated design curation platform. Here I explore visual design, share inspiration from digital products worldwide, and build high-quality web templates for designers and entrepreneurs.</p>
       </div>
 
-      <!-- BDSGN PAGE -->
-      <div id="page-bdsgn" class="page">
-        <h1 style="font-family:var(--display); font-size: 38px; font-weight: 600; margin-bottom: 12px;">BDSGN Platform</h1>
-        <p style="color:var(--ink-dim); line-height: 1.6; max-width: 650px; font-size: 16px;">
-          Alongside my core role, I run BDSGN — a dedicated design curation platform. Exploring visual design, sharing inspiration from digital products worldwide, and building high-quality web templates for designers and entrepreneurs.
-        </p>
+      <section>
+        <div class="wrap">
+          <div class="sec-head"><h2 class="sec-title">Digital Product Gallery</h2></div>
+          <div class="gallery">
+            <div class="g-card"><div class="swatch"></div><span class="tag">Framer Website</span><h4>Framer Template A</h4><a class="link" href="#">View Template ↗</a></div>
+            <div class="g-card"><div class="swatch"></div><span class="tag">Social Media Kit</span><h4>Canva Template B</h4><a class="link" href="#">View Template ↗</a></div>
+            <div class="g-card"><div class="swatch"></div><span class="tag">UI Component Kit</span><h4>Creative Market C</h4><a class="link" href="#">View Template ↗</a></div>
+            <div class="g-card"><div class="swatch"></div><span class="tag">Framer Portfolio</span><h4>Interior Design PTF</h4><a class="link" href="#">View Template ↗</a></div>
+            <div class="g-card"><div class="swatch"></div><span class="tag">Canva Asset</span><h4>Web Template E</h4><a class="link" href="#">View Template ↗</a></div>
+            <div class="g-card"><div class="swatch"></div><span class="tag">Framer Asset</span><h4>Web Template F</h4><a class="link" href="#">View Template ↗</a></div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="wrap">
+          <div class="sec-head"><h2 class="sec-title">Platform Statistics</h2></div>
+          <div class="stat-strip">
+            <div class="s"><div class="eyebrow">Community &amp; Reach</div><p>Managing an active design community through social media platforms — sharing curated inspiration on a consistent cadence.</p></div>
+            <div class="s"><div class="eyebrow">Reference Point</div><p>Serving as a trusted reference point for designers and design enthusiasts looking for production-ready templates.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="wrap"><footer class="sitefoot">
+        <div class="foot-links">
+          <a href="mailto:hello@yogapratama.id">Email ↗</a>
+          <a href="#" target="_blank">LinkedIn ↗</a>
+          <a href="#" target="_blank">BDSGN Shop ↗</a>
+        </div>
+      </footer></div>
+    </section>
+
+    <!-- ============ WORK INDEX ============ -->
+    <section id="page-work" class="page">
+      <div class="wrap" style="padding-top:120px;">
+        <div class="eyebrow">Selected Projects</div>
+        <h1 class="display" style="margin-top:22px;font-size:clamp(36px,6.5vw,80px);">Engineering<br>Scalable Systems.</h1>
+        <p class="lede">Optimizing dense data and automating design operations, over 6+ years.</p>
       </div>
 
-    </main>
+      <section>
+        <div class="wrap">
+          <div class="case-list">
+
+            <div class="case" id="case-1">
+              <div class="case-top">
+                <div class="num">01</div>
+                <div>
+                  <span class="cat">Design Operations &amp; Automation</span>
+                  <h3>Scaling B2B White-Label POS via Figma Variables</h3>
+                </div>
+                <div class="expand">+</div>
+              </div>
+              <div class="case-body"><div class="case-body-inner">
+                <div>
+                  <p>The internal operations workflow for onboarding new white-label POS clients depended on manually rebuilt UI kits for every merchant theme — slow, error-prone, and hard to maintain at scale.</p>
+                  <p><strong>Migrated the system to a multi-tier token architecture</strong> in Figma Variables: primitive tokens for raw values, semantic tokens for intent, and a component layer that resolved automatically per client theme.</p>
+                  <p>The result cut client onboarding time from <strong>38 hours down to 75 minutes</strong>, and removed the design bottleneck from the sales pipeline entirely.</p>
+                </div>
+                <div class="case-visual">
+                  <span class="lbl">Onboarding Time / Client</span>
+                  <div class="bars"><div class="b" style="height:100%"></div><div class="b" style="height:90%"></div><div class="b" style="height:70%"></div><div class="b hi" style="height:6%"></div></div>
+                  <div class="metric-box">96.7%<span class="lbl2">Production Time Saved</span></div>
+                </div>
+              </div></div>
+            </div>
+
+            <div class="case" id="case-2">
+              <div class="case-top">
+                <div class="num">02</div>
+                <div>
+                  <span class="cat">Multi-Platform Ecosystems</span>
+                  <h3>Ignatia POS: Mobile Ecosystem, Portrait &amp; Landscape</h3>
+                </div>
+                <div class="expand">+</div>
+              </div>
+              <div class="case-body"><div class="case-body-inner">
+                <div>
+                  <p>Built the foundational B2B POS multi-platform ecosystem from scratch — the core transactional engine and framework merchants rely on at the point of sale.</p>
+                  <p>Designed <strong>highly adaptive native interfaces</strong> for both portrait and landscape layouts, spanning tablets and mobile devices used across varied retail counter setups.</p>
+                  <p>The framework became the base layer every subsequent Ignatia POS surface was built on.</p>
+                </div>
+                <div class="case-visual">
+                  <span class="lbl">Layout Coverage</span>
+                  <div class="bars"><div class="b hi" style="height:70%"></div><div class="b hi" style="height:70%"></div><div class="b" style="height:100%"></div><div class="b hi" style="height:70%"></div></div>
+                  <div class="metric-box" style="font-size:16px;">Portrait + Landscape<span class="lbl2">Multi-Platform Adaptability</span></div>
+                </div>
+              </div></div>
+            </div>
+
+            <div class="case" id="case-3">
+              <div class="case-top">
+                <div class="num">03</div>
+                <div>
+                  <span class="cat">Data Architecture &amp; Migration</span>
+                  <h3>SaaS Overhaul: Responsive Web Backoffice Ecosystem</h3>
+                </div>
+                <div class="expand">+</div>
+              </div>
+              <div class="case-body"><div class="case-body-inner">
+                <div>
+                  <p>The legacy merchant dashboard presented dense operational data through a rigid, non-responsive layout that created real friction for day-to-day use.</p>
+                  <p>Led the <strong>structural overhaul and responsive web migration</strong> of the dashboard, restructuring information hierarchy to keep dense data legible without hiding it.</p>
+                  <p>Operational friction dropped as merchants could act on the data directly, on whatever screen they were working from.</p>
+                </div>
+                <div class="case-visual">
+                  <span class="lbl">Data Density Handled</span>
+                  <div class="bars"><div class="b" style="height:20%"></div><div class="b" style="height:35%"></div><div class="b" style="height:55%"></div><div class="b hi" style="height:85%"></div></div>
+                  <div class="metric-box" style="font-size:16px;">Optimized<span class="lbl2">Dense Data Presentation</span></div>
+                </div>
+              </div></div>
+            </div>
+
+          </div>
+
+          <div class="archive-grid">
+            <div class="archive-card">
+              <span class="eyebrow">Side Initiative</span>
+              <h4>BDSGN: Digital Asset Business</h4>
+              <p>Designing and selling web templates while building a design curation community platform.</p>
+              <a class="btn" href="#" data-goto="bdsgn">Explore Platform ↗</a>
+            </div>
+            <div class="archive-card">
+              <span class="eyebrow">Writing</span>
+              <h4>UX Collective Contributions</h4>
+              <p>Writing articles based on personal opinions and hands-on product design experience.</p>
+              <a class="btn" href="#" target="_blank">Read Articles ↗</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="wrap"><footer class="sitefoot">
+        <div class="foot-links">
+          <a href="mailto:hello@yogapratama.id">Email ↗</a>
+          <a href="#" target="_blank">LinkedIn ↗</a>
+          <a href="#" data-goto="bdsgn">BDSGN Shop ↗</a>
+        </div>
+      </footer></div>
+    </section>
+
   </div>
 
 <script>
-  function switchPage(pageId) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById('page-' + pageId).classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  const pages = document.querySelectorAll('.page');
+  const navBtns = document.querySelectorAll('.rail nav button');
+  const hud = document.getElementById('hud');
+  const labels = {home:'HOME / 01', work:'WORK / 02', about:'ABOUT / 03', bdsgn:'BDSGN / 04'};
+
+  function goTo(id, caseId){
+    pages.forEach(p => p.classList.toggle('active', p.id === 'page-'+id));
+    navBtns.forEach(b => b.classList.toggle('active', b.dataset.page === id));
+    hud.textContent = 'VIEW — ' + labels[id];
+    window.scrollTo({top:0, behavior:'auto'});
+    document.getElementById('railNav').classList.remove('open');
+    if(caseId){
+      setTimeout(() => {
+        const el = document.getElementById('case-'+caseId);
+        if(el){ el.classList.add('open'); el.scrollIntoView({behavior:'smooth', block:'start'}); }
+      }, 60);
+    }
   }
+
+  navBtns.forEach(b => b.addEventListener('click', () => goTo(b.dataset.page)));
+  document.querySelectorAll('[data-goto]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      goTo(el.dataset.goto, el.dataset.case);
+    });
+  });
+
+  document.getElementById('railToggle').addEventListener('click', () => {
+    document.getElementById('railNav').classList.toggle('open');
+  });
+
+  document.querySelectorAll('.case-top').forEach(top => {
+    top.addEventListener('click', () => {
+      const parent = top.closest('.case');
+      const wasOpen = parent.classList.contains('open');
+      document.querySelectorAll('.case.open').forEach(c => c.classList.remove('open'));
+      if(!wasOpen) parent.classList.add('open');
+    });
+    top.setAttribute('tabindex','0');
+    top.addEventListener('keydown', (e) => { if(e.key==='Enter' || e.key===' '){ e.preventDefault(); top.click(); } });
+  });
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); });
+  }, {threshold:0.15});
+  document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
 </script>
 </body>
 </html>
