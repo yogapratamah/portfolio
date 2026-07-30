@@ -31,11 +31,7 @@
   a{color:inherit;text-decoration:none;}
   button{font-family:inherit;background:none;border:none;color:inherit;cursor:pointer;}
 
-  /* Layout Palmer Style: Sidebar Kiri Tetap, Konten Kanan Scroll */
-  .layout-container {
-    display: flex;
-    min-height: 100vh;
-  }
+  .layout-container { display: flex; min-height: 100vh; }
 
   /* Sidebar */
   .sidebar {
@@ -46,9 +42,7 @@
     flex-direction: column;
     justify-content: space-between;
     position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
+    top: 0; left: 0; height: 100vh;
     background: var(--bg);
     z-index: 50;
   }
@@ -58,27 +52,17 @@
     font-size: 20px;
     letter-spacing: -0.02em;
   }
-  .nav-links {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
+  .nav-links { display: flex; flex-direction: column; gap: 16px; }
   .nav-links button {
     text-align: left;
     font-size: 14px;
     color: var(--ink-dim);
     transition: color 0.2s;
   }
-  .nav-links button:hover, .nav-links button.active {
-    color: var(--ink);
-  }
-  .sidebar-foot {
-    font-size: 12px;
-    color: var(--ink-dim);
-    line-height: 1.5;
-  }
+  .nav-links button:hover, .nav-links button.active { color: var(--ink); }
+  .sidebar-foot { font-size: 12px; color: var(--ink-dim); line-height: 1.5; }
 
-  /* Main Content Area */
+  /* Main Content */
   .main-content {
     margin-left: var(--rail-w);
     flex: 1;
@@ -89,14 +73,10 @@
   .page { display: none; }
   .page.active { display: block; }
 
-  /* Hero Section */
-  .hero {
-    padding-bottom: 100px;
-    border-bottom: 1px solid var(--line);
-  }
+  .hero { padding-bottom: 80px; border-bottom: 1px solid var(--line); }
   .hero h1 {
     font-family: var(--display);
-    font-size: clamp(36px, 4.5vw, 64px);
+    font-size: clamp(36px, 4.5vw, 60px);
     line-height: 1.1;
     font-weight: 600;
     letter-spacing: -0.03em;
@@ -104,7 +84,7 @@
     max-width: 800px;
   }
   .hero p {
-    font-size: 18px;
+    font-size: 17px;
     color: var(--ink-dim);
     line-height: 1.6;
     max-width: 650px;
@@ -112,26 +92,21 @@
   }
   .hero p strong { color: var(--ink); }
 
-  /* Selected Works Section (Palmer Style List/Grid) */
   .section-title {
     font-family: var(--display);
-    font-size: 14px;
+    font-size: 13px;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: var(--ink-dim);
-    margin: 60px 0 30px;
+    margin: 60px 0 24px;
   }
 
-  .works-list {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-
+  /* Works List */
+  .works-list { display: flex; flex-direction: column; gap: 20px; }
   .work-item {
     background: var(--card-bg);
     border: 1px solid var(--line);
-    padding: 40px;
+    padding: 36px;
     display: grid;
     grid-template-columns: 1fr auto;
     gap: 30px;
@@ -139,19 +114,17 @@
     transition: border-color 0.2s;
     cursor: pointer;
   }
-  .work-item:hover {
-    border-color: var(--ink-dim);
-  }
+  .work-item:hover { border-color: var(--ink-dim); }
   .work-meta {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--accent);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
   .work-info h3 {
     font-family: var(--display);
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 600;
     margin-bottom: 10px;
     letter-spacing: -0.01em;
@@ -160,45 +133,71 @@
     font-size: 14px;
     color: var(--ink-dim);
     line-height: 1.5;
-    max-width: 600px;
+    max-width: 650px;
   }
-  .work-action {
-    font-size: 14px;
-    color: var(--ink);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+  .work-action { font-size: 14px; color: var(--ink); display: flex; align-items: center; gap: 8px; }
 
-  /* Responsive Mobile */
+  /* Detailed Timeline & About Blocks */
+  .timeline-block { border-top: 1px solid var(--line); margin-top: 40px; }
+  .t-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 24px;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .t-row .yr { font-size: 13px; color: var(--ink-dim); font-family: var(--display); }
+  .t-row h4 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+  .t-row .role { font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; display: block; }
+  .t-row ul { list-style: none; }
+  .t-row li { font-size: 14px; color: var(--ink-dim); line-height: 1.6; position: relative; padding-left: 16px; margin-bottom: 4px; }
+  .t-row li::before { content: "—"; position: absolute; left: 0; color: var(--line); }
+
+  .toolkit-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-top: 40px;
+  }
+  .toolkit-card {
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    padding: 28px;
+  }
+  .toolkit-card h4 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 14px;
+    font-family: var(--display);
+  }
+  .toolkit-card ul { list-style: none; }
+  .toolkit-card li { font-size: 14px; color: var(--ink-dim); padding: 6px 0; border-bottom: 1px solid var(--line); }
+  .toolkit-card li:last-child { border-bottom: none; }
+
   @media(max-width: 900px) {
     .layout-container { flex-direction: column; }
-    .sidebar {
-      position: relative;
-      width: 100%;
-      height: auto;
-      padding: 24px;
-      flex-direction: row;
-      align-items: center;
-    }
-    .nav-links { display: none; } /* Simplified for mobile example */
+    .sidebar { position: relative; width: 100%; height: auto; padding: 24px; flex-direction: row; align-items: center; }
+    .nav-links { display: flex; flex-direction: row; gap: 12px; font-size: 12px; }
     .sidebar-foot { display: none; }
     .main-content { margin-left: 0; padding: 40px 20px; }
     .work-item { grid-template-columns: 1fr; padding: 24px; }
+    .toolkit-grid { grid-template-columns: 1fr; }
+    .t-row { grid-template-columns: 1fr; gap: 8px; }
   }
 </style>
 </head>
 <body>
 
   <div class="layout-container">
-    <!-- Sidebar Kiri -->
     <aside class="sidebar">
       <div>
         <div class="brand">Yoga Pratama H.</div>
       </div>
       <nav class="nav-links">
         <button class="active" onclick="switchPage('home')">Index</button>
-        <button onclick="switchPage('work')">Selected Works</button>
+        <button onclick="switchPage('work')">Works</button>
         <button onclick="switchPage('about')">About</button>
         <button onclick="switchPage('bdsgn')">BDSGN</button>
       </nav>
@@ -207,79 +206,190 @@
       </div>
     </aside>
 
-    <!-- Konten Kanan (Bisa di-scroll) -->
     <main class="main-content">
       
-      <!-- PAGE HOME -->
+      <!-- HOME PAGE -->
       <div id="page-home" class="page active">
         <section class="hero">
-          <h1>Product Design Lead focusing on design systems, multi-platform architecture, and dense SaaS systems.</h1>
-          <p>Currently leading design at <strong>Ignatia</strong>, building scalable B2B POS frameworks, and managing <strong>BDSGN</strong> ecosystem.</p>
+          <div style="font-size: 12px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px;">Product Design Lead — Bandung, Indonesia</div>
+          <h1>Design Ops for Dense SaaS Systems & Multi-Platform Frameworks.</h1>
+          <p>I'm <strong>Yoga Pratama H.</strong>, specializing in SaaS product strategy, design systems engineering, and scalable architecture. Currently leading design at <strong>Ignatia</strong>, and founder of <strong>BDSGN</strong>.</p>
         </section>
 
         <div class="section-title">Selected Works</div>
-        
         <div class="works-list">
-          <!-- Work 1 -->
           <div class="work-item" onclick="switchPage('work')">
             <div class="work-info">
               <div class="work-meta">Case 01 — Design Operations & Automation</div>
               <h3>Scaling B2B White-Label POS via Figma Variables</h3>
-              <p>Migrated operations workflow to multi-tier token architecture, cutting client onboarding bottlenecks significantly.</p>
+              <p>Redesigned internal operations workflow by migrating to a multi-tier token architecture, cutting client onboarding bottlenecks.</p>
             </div>
-            <div class="work-action">View Case →</div>
+            <div class="work-action">View →</div>
           </div>
 
-          <!-- Work 2 -->
           <div class="work-item" onclick="switchPage('work')">
             <div class="work-info">
-              <div class="work-meta">Case 02 — Multi-Platform Ecosystems</div>
-              <h3>Ignatia POS: Mobile Ecosystem Architecture</h3>
-              <p>Built core transactional engine and adaptive native interfaces for portrait and landscape retail setups.</p>
+              <div class="work-meta">Case 02 — Multi-Platform SaaS</div>
+              <h3>Ignatia POS: Mobile Ecosystem Portrait & Landscape</h3>
+              <p>Building the foundational B2B POS multi-platform transactional engine and framework from scratch.</p>
             </div>
-            <div class="work-action">View Case →</div>
+            <div class="work-action">View →</div>
           </div>
 
-          <!-- Work 3 -->
           <div class="work-item" onclick="switchPage('work')">
             <div class="work-info">
-              <div class="work-meta">Case 03 — Data Architecture & Migration</div>
-              <h3>SaaS Overhaul: Responsive Web Backoffice</h3>
-              <p>Structural migration of legacy merchant dashboards to handle dense operational data seamlessly.</p>
+              <div class="work-meta">Case 03 — Data Architecture</div>
+              <h3>Overhauling Legacy Dashboard for Dense Data Presentation</h3>
+              <p>Structural overhaul and responsive web migration of the legacy merchant dashboard.</p>
             </div>
-            <div class="work-action">View Case →</div>
+            <div class="work-action">View →</div>
+          </div>
+        </div>
+
+        <div class="section-title">Capabilities & Toolkit</div>
+        <div class="toolkit-grid">
+          <div class="toolkit-card">
+            <h4>Core Expertise</h4>
+            <ul>
+              <li>SaaS Product Strategy</li>
+              <li>Design Ops Architecture</li>
+              <li>Cross-Functional Leadership</li>
+            </ul>
+          </div>
+          <div class="toolkit-card">
+            <h4>Advanced Toolkit</h4>
+            <ul>
+              <li>Figma (Variables / Tokens)</li>
+              <li>Framer (Production-Ready)</li>
+              <li>Tokens Studio / JSON</li>
+            </ul>
+          </div>
+          <div class="toolkit-card">
+            <h4>Design Philosophy</h4>
+            <ul>
+              <li>Pragmatism &gt; Idealism</li>
+              <li>Data-Driven Decisions</li>
+              <li>Technical Feasibility First</li>
+            </ul>
           </div>
         </div>
       </div>
 
-      <!-- PAGE WORK DETAIL -->
+      <!-- WORK / CASE STUDIES PAGE -->
       <div id="page-work" class="page">
-        <h1 style="font-family:var(--display); font-size: 36px; margin-bottom: 20px;">Selected Works</h1>
-        <p style="color:var(--ink-dim); margin-bottom: 40px;">Deep dive into production case studies and structural systems.</p>
+        <h1 style="font-family:var(--display); font-size: 38px; font-weight: 600; margin-bottom: 12px;">Selected Projects</h1>
+        <p style="color:var(--ink-dim); margin-bottom: 40px; font-size: 16px;">A complete working record of design ops, multi-platform architecture, and dense data systems.</p>
+        
         <div class="works-list">
-          <div class="work-item">
+          <div class="work-item" style="cursor: default;">
             <div class="work-info">
-              <div class="work-meta">Case 01 Details</div>
-              <h3>Scaling B2B White-Label POS</h3>
-              <p>Mengganti pendekatan manual dengan sistem token bertingkat (primitive & semantic tokens) yang terhubung langsung ke Figma Variables agar kustomisasi tema merchant otomatis tanpa bangun ulang UI kit dari nol.</p>
+              <div class="work-meta">Case 01 — Design Ops</div>
+              <h3>Scaling B2B White-Label POS via Figma Variables Automation</h3>
+              <p style="margin-top: 12px;"><strong>Problem:</strong> Onboarding new white-label POS clients depended on manually rebuilt UI kits for every merchant theme — slow, error-prone, and hard to maintain at scale.</p>
+              <p style="margin-top: 8px;"><strong>Solution:</strong> Migrated the system to a multi-tier token architecture in Figma Variables: primitive tokens for raw values, semantic tokens for intent, and a component layer resolving automatically per client theme.</p>
+              <p style="margin-top: 8px;"><strong>Impact:</strong> Cut client onboarding friction dramatically and removed design bottlenecks from the sales pipeline entirely.</p>
+            </div>
+          </div>
+
+          <div class="work-item" style="cursor: default;">
+            <div class="work-info">
+              <div class="work-meta">Case 02 — Multi-Platform SaaS</div>
+              <h3>Ignatia POS: Mobile Ecosystem Architecting Portrait & Landscape</h3>
+              <p style="margin-top: 12px;"><strong>Execution:</strong> Built the foundational B2B POS multi-platform ecosystem from scratch. Designed highly adaptive native interfaces for both portrait and landscape layouts across tablets and mobile devices used in varied retail setups.</p>
+            </div>
+          </div>
+
+          <div class="work-item" style="cursor: default;">
+            <div class="work-info">
+              <div class="work-meta">Case 03 — Data Architecture</div>
+              <h3>Overhauling Legacy Dashboard for Dense Data Presentation</h3>
+              <p style="margin-top: 12px;"><strong>Execution:</strong> Structural overhaul and responsive web migration of the legacy merchant dashboard, restructuring information hierarchy to keep dense operational data legible without hiding important metrics.</p>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- PAGE ABOUT -->
+      <!-- ABOUT PAGE -->
       <div id="page-about" class="page">
-        <h1 style="font-family:var(--display); font-size: 36px; margin-bottom: 20px;">About Me</h1>
-        <p style="color:var(--ink-dim); line-height: 1.6; max-width: 600px;">
-          Product Design Lead dengan pengalaman lebih dari 6 tahun di ekosistem SaaS dan designops. Berbasis di Bandung, fokus menjembatani logika desain visual dengan eksekusi koding yang presisi.
+        <h1 style="font-family:var(--display); font-size: 38px; font-weight: 600; margin-bottom: 12px;">About Me</h1>
+        <p style="color:var(--ink-dim); line-height: 1.6; max-width: 650px; font-size: 16px;">
+          Product Design Lead with 6+ years of experience building multi-platform SaaS ecosystems, dense backoffice dashboards, and centralized design systems. Focused on Design Ops — creating scalable token architectures that cut production time.
         </p>
+
+        <div class="section-title">Professional Experience</div>
+        <div class="timeline-block">
+          <div class="t-row">
+            <div class="yr">2022 — Present</div>
+            <div>
+              <h4>Product Design Lead</h4>
+              <span class="role">PT Pasti Laba Solusi Teknologi (Ignatia)</span>
+              <ul>
+                <li>Leading design initiatives for Ignatia's B2B ecosystem</li>
+                <li>Managing and mentoring junior designers</li>
+                <li>Architecting variables and semantic token systems</li>
+                <li>Migrating legacy web dashboards for dense data</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="t-row">
+            <div class="yr">2022 — Present</div>
+            <div>
+              <h4>Creative Director</h4>
+              <span class="role">Bonjourdsgn (BDSGN)</span>
+              <ul><li>Curating digital designs and selling web templates</li></ul>
+            </div>
+          </div>
+
+          <div class="t-row">
+            <div class="yr">2023 — Present</div>
+            <div>
+              <h4>UX Content Writer</h4>
+              <span class="role">UX Collective Bootcamp</span>
+              <ul><li>Writing articles based on personal, hands-on product design</li></ul>
+            </div>
+          </div>
+
+          <div class="t-row">
+            <div class="yr">2020 — 2022</div>
+            <div>
+              <h4>UI/UX Designer</h4>
+              <span class="role">PT Pasti Laba Solusi Teknologi</span>
+              <ul><li>Architected the foundational B2B POS ecosystem from scratch</li></ul>
+            </div>
+          </div>
+
+          <div class="t-row">
+            <div class="yr">2021</div>
+            <div>
+              <h4>UI Designer</h4>
+              <span class="role">Billionaire Store</span>
+              <ul><li>Transformed wireframes into high-fidelity mobile &amp; web UI</li></ul>
+            </div>
+          </div>
+
+          <div class="t-row">
+            <div class="yr">2019</div>
+            <div>
+              <h4>UI/UX Designer</h4>
+              <span class="role">BTS — PT Intersolusi Teknologi Asia</span>
+              <ul><li>Handled interface designs for major clients, including PT KAI</li></ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-title">Speaking & Community</div>
+        <div class="toolkit-card" style="margin-top: 20px;">
+          <h4>Guest Speaker — MySkill (2023)</h4>
+          <p style="font-size: 14px; color: var(--ink-dim); margin-top: 6px;">Covering UI/UX Design Fundamentals and Wireframing & Structural Design sessions.</p>
+        </div>
       </div>
 
-      <!-- PAGE BDSGN -->
+      <!-- BDSGN PAGE -->
       <div id="page-bdsgn" class="page">
-        <h1 style="font-family:var(--display); font-size: 36px; margin-bottom: 20px;">BDSGN Platform</h1>
-        <p style="color:var(--ink-dim); line-height: 1.6; max-width: 600px;">
-          Kurasi aset digital, template web Framer, dan sumber daya desain yang dikelola secara independen di samping peran utama.
+        <h1 style="font-family:var(--display); font-size: 38px; font-weight: 600; margin-bottom: 12px;">BDSGN Platform</h1>
+        <p style="color:var(--ink-dim); line-height: 1.6; max-width: 650px; font-size: 16px;">
+          Alongside my core role, I run BDSGN — a dedicated design curation platform. Exploring visual design, sharing inspiration from digital products worldwide, and building high-quality web templates for designers and entrepreneurs.
         </p>
       </div>
 
